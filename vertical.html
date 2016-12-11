@@ -1,0 +1,40 @@
+<html>
+<head>
+	<meta charset="UTF8">
+	<title>Ranje Slider</title>
+	<meta name="description" content="Ranje Slider"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0 maximum-scale=1.0, user-scalable=no, minimal-ui"/>
+	<meta name="twitter:card" content="summary"/>
+	<meta name="twitter:image" content="http://static.dev/images/logo.png"/>
+	<meta property="og:image" content="http://static.dev/images/logo.png"/>
+	<meta property='og:locale' content='fa_IR'/>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<script src="js/script.js"></script>
+</head>
+
+<body>
+	<h1>Vertical</h1>
+	<div class="range-slider" data-type='vertical'></div>
+	<div class="range-slider" data-type='vertical' data-min="10"></div>
+	<div class="range-slider" data-type='vertical' data-min="10" data-min-default='30'></div>
+	<div class="range-slider" data-type='vertical' data-max='200'></div>
+	<div class="range-slider" data-type='vertical' data-max='200' data-max-default='160'></div>
+	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200'></div>
+	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5"></div>
+	<h2>default</h2>
+	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5" data-min-default='30'></div>
+	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5" data-max-default='180'></div>
+	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="8" data-min-default='30' data-max-default='180'></div>
+	<h2>limit</h2>
+	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5" data-min-limit='20'></div>
+	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5" data-max-limit='180'></div>
+	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5" data-min-limit='20' data-max-limit='180'></div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".range-slider").rangeSlider();
+		});
+	</script>
+</body>
+</html>
