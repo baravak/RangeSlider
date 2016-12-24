@@ -528,49 +528,69 @@
 
 var add_selection = function(_name)
 {
-// 	$(this).unbind('mousedown.dynamic-range');
-// 	$(this).bind('mousedown.dynamic-range', function(){
-// 	var _self = this;
-// 	var dynamic_range_click = parseInt($(_self).find(".dynamic-margin").css("width"));
-// 	var dynamic_margin_click = parseInt($(_self).find(".dynamic-margin").css("width"));
-// // console.log('click');
-// 	$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, dynamic_range_click);
-// 	$(_self).rangeSlider('option', 'range','to',{type:'pixel'}, dynamic_range_click+dynamic_margin_click);
+	$(_self).find('.dynamic-range span.mount').hide(); //design*********
+	$(this).unbind('mousedown.dynamic-range');
+	$(this).bind('mousedown.dynamic-range', function(){
+	var _self = this;
+	var dynamic_range_click = parseInt($(_self).find(".dynamic-range").css("width"));
+	var dynamic_margin_click = parseInt($(_self).find(".dynamic-margin").css("width"));
+	var to_click = parseInt($(_self).find(".dynamic-margin").css("width"));
+	var range_width = dynamic_range_click;
+	var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
+	var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+	var ziro_on_click  = mouse_position - ziro_point;
+	var mouse_selection = mouse_position - ziro_point;
+	mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
 
-// 	var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
-// 	var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
-// 	var ziro_on_click  = mouse_position - ziro_point;
-// 			var mouse_selection = mouse_position - ziro_point;
-// 			mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
+	$(document).unbind("mousemove.dynamic-range");
+	$(document).bind("mousemove.dynamic-range", function(event){
 
-// 	$(document).unbind("mousemove.dynamic-range");
-// 	$(document).bind("mousemove.dynamic-range", function(event){
+		$(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********
+		$(_self).find('.dynamic-range span.mount').show(); //design*********
 
-// 	var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
-// 	var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
-// 	var mouse_selection = mouse_position - ziro_point;
-// 	mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
-// 	var move = mouse_selection - ziro_on_click;
+		var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
+		var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+		var mouse_selection = mouse_position - ziro_point;
+		mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
+		var move = mouse_selection - ziro_on_click;
+		var from_click = dynamic_margin_click;
+		var to_click = dynamic_margin_click + dynamic_range_click;
+		var total_width = parseInt($(_self).css("width"));
 
+		var new_from = move + dynamic_margin_click;
+		var new_to = dynamic_range_click+dynamic_margin_click+move;
+		$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, new_from);
+		$(_self).rangeSlider('option', 'range','to',{type:'pixel'}, new_to);
+		$(_self).find("dynamic-range").css("width",range_width);
 
-// console.log(ziro_on_click);
-// console.log(move);
+		if (parseInt($(_self).find(".dynamic-range").css("width")) <= range_width) 
+		{
+			$(_self).find(".dynamic-range").css("width",range_width);
 
+			var my_unit = $(_self).rangeSlider('option', 'unit');
+			if (new_to >= total_width) 
+			{
+				console.log('new_to > total_width');
+				$(_self).find(".dynamic-margin").css("width", (total_width-range_width));
+			}
+			else if(new_from <= 0)
+			{
+				console.log('new_from <= 0');
+				$(_self).find(".dynamic-margin").css("width", 0);
+			}
+		}
 
-// 	$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, move + dynamic_margin_click);
-// 	$(_self).rangeSlider('option', 'range','to',{type:'pixel'}, dynamic_range_click+dynamic_margin_click+move);
+		}).bind("mouseup.dynamic-range", function(){
+			$(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
+			$(_self).find('.dynamic-range span.mount').hide(); //design*********
 
-// 		}).bind("mouseup.dynamic-range", function(){
-// 			$(document).unbind("mouseup.dynamic-range");
-// 			$(document).unbind("mousemove.dynamic-range");
-// 		});
-// 		return false;
-// 	}).bind("mouseup", function(){
-// 		$(document).unbind("mousemove.dynamic-range");
-// 	})
-
-
-
+			$(document).unbind("mouseup.dynamic-range");
+			$(document).unbind("mousemove.dynamic-range");
+		});
+		return false;
+	}).bind("mouseup", function(){
+		$(document).unbind("mousemove.dynamic-range");
+	})
 
 
 
