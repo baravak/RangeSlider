@@ -210,8 +210,19 @@
 
 
 
-	optionMethod.range = function(_name, _set, _value, _option)
+	optionMethod.range = function(_name, _set, _option, _value)
 	{
+		if (_value == null) 
+		{
+			if (_set == 'from') 
+			{
+				return (_set + ": " + $(this).rangeSlider('option', 'margin'));
+			}
+			// else if (_set == 'to') 
+			// {
+			// 	return (_set + ": " + $(this).rangeSlider('option', 'margin'));
+			// }
+		}
 
 		if (_set == 'to')
 		{
@@ -219,7 +230,14 @@
 		}
 		else if (_set == 'from')
 		{
-			return $(this).range(_value, null, _option);
+			if ($(this).attr('data-infinity') == 'min')
+			{
+				return false;
+			}
+			else
+			{
+				return $(this).range(_value, null, _option);
+			}
 		}
 	}
 
@@ -294,11 +312,9 @@
 				data.depth       = this.rangeSlider('option', 'depth');
 				data.min_unit    = this.rangeSlider('option', 'min_unit');
 				
-
 				var option = {
 					type : 'unit'
 				}
-
 
 				$.extend(option, _option);
 				option.from_type = option.type;
@@ -374,7 +390,6 @@
 					}
 				}
 
-
 				if(to_step > data.unit)
 				{
 					to_step = data.unit;
@@ -396,6 +411,42 @@
 				}
 
 
+
+
+				var min_unit = $(this).rangeSlider('option', 'min_unit');
+
+				$(this).find(".dynamic-range .min .mount").attr("data-value-show", (data.min + from_step));
+				$(this).find(".dynamic-range .max .mount").attr("data-value-show", (data.min + to_step));;
+
+				if ( to_step-from_step <= min_unit) 
+				{
+					$(this).find(".dynamic-range .max .mount").attr("data-value-show", (min_unit+data.min+from_step));
+					$(this).find(".dynamic-range .min .mount").attr("data-value-show", (to_step-min_unit+data.min));
+				}
+
+				if (to_step <= min_unit+from_step)
+				{
+
+					if(_from == null)
+					{
+						from_step = to_step - min_unit;
+					}
+					else if(_to == null)
+					{
+						to_step = from_step + min_unit;
+					}
+					
+
+					if (to_step >= ($(this).rangeSlider('option', 'unit')))
+					{
+						to_step = ($(this).rangeSlider('option', 'unit'));
+						from_step = ($(this).rangeSlider('option', 'unit') - min_unit);
+					}
+				}
+
+
+
+
 				var id = this.attr('id');
 				if(id)
 				{
@@ -413,32 +464,8 @@
 				}
 
 
-				$(this).find(".dynamic-range .min .mount").attr("data-value-show", (data.min + from_step));
-				$(this).find(".dynamic-range .max .mount").attr("data-value-show", (data.min + to_step));;
-
-
 				from = (from_step * 100) / ($(this).rangeSlider('option', 'unit'));
 				to = (to_step * 100) / ($(this).rangeSlider('option', 'unit'));
-
-	var min_unit = $(this).rangeSlider('option', 'min_unit');
-	var min_unit_percent = (min_unit * 100) / ($(this).rangeSlider('option', 'unit'));
-
-
-
-
-					if (to-from <= min_unit_percent) 
-					{
-						to = from + min_unit_percent;
-						if (to >= ($(this).rangeSlider('option', 'unit')))
-						{
-							to = ($(this).rangeSlider('option', 'unit'));
-							from = ($(this).rangeSlider('option', 'unit') - min_unit_percent);
-						}
-
-
-
-					}
-
 
 
 				var depth = to - from;
@@ -461,7 +488,6 @@
 					this.find('.dynamic-range').css(depth_type, depth + "%");
 					this.trigger("range-slider::change", [data.min + from_step, data.min + to_step]);
 				}
-
 			}
 
 			var margin_range = $("<div class='dynamic-margin'></div>");
@@ -502,6 +528,52 @@
 
 var add_selection = function(_name)
 {
+// 	$(this).unbind('mousedown.dynamic-range');
+// 	$(this).bind('mousedown.dynamic-range', function(){
+// 	var _self = this;
+// 	var dynamic_range_click = parseInt($(_self).find(".dynamic-margin").css("width"));
+// 	var dynamic_margin_click = parseInt($(_self).find(".dynamic-margin").css("width"));
+// // console.log('click');
+// 	$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, dynamic_range_click);
+// 	$(_self).rangeSlider('option', 'range','to',{type:'pixel'}, dynamic_range_click+dynamic_margin_click);
+
+// 	var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
+// 	var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+// 	var ziro_on_click  = mouse_position - ziro_point;
+// 			var mouse_selection = mouse_position - ziro_point;
+// 			mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
+
+// 	$(document).unbind("mousemove.dynamic-range");
+// 	$(document).bind("mousemove.dynamic-range", function(event){
+
+// 	var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
+// 	var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+// 	var mouse_selection = mouse_position - ziro_point;
+// 	mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
+// 	var move = mouse_selection - ziro_on_click;
+
+
+// console.log(ziro_on_click);
+// console.log(move);
+
+
+// 	$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, move + dynamic_margin_click);
+// 	$(_self).rangeSlider('option', 'range','to',{type:'pixel'}, dynamic_range_click+dynamic_margin_click+move);
+
+// 		}).bind("mouseup.dynamic-range", function(){
+// 			$(document).unbind("mouseup.dynamic-range");
+// 			$(document).unbind("mousemove.dynamic-range");
+// 		});
+// 		return false;
+// 	}).bind("mouseup", function(){
+// 		$(document).unbind("mousemove.dynamic-range");
+// 	})
+
+
+
+
+
+
 	$(_self).find('.dynamic-range span.mount').hide(); //design*********
 	var data = $(this).data('range-slider');
 	var _self = this;
@@ -511,6 +583,7 @@ var add_selection = function(_name)
 	selection.unbind('mousedown.range-slider');
 	selection.bind('mousedown.range-slider', function(){
 		var _selection = this;
+
 		$(document).unbind("mousemove.range-slider");
 		$(document).bind("mousemove.range-slider", function(event){
 
@@ -523,11 +596,11 @@ var add_selection = function(_name)
 			mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
 			if(_name == 'max')
 			{
-				$(_self).rangeSlider('option', 'range', 'to', mouse_selection, {type:'pixel'});
+				$(_self).rangeSlider('option', 'range', 'to',{type:'pixel'}, mouse_selection);
 			}
 			else
 			{
-				$(_self).rangeSlider('option', 'range','from',mouse_selection, {type:'pixel'});
+				$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, mouse_selection);
 			}
 		}).bind("mouseup.range-slider", function(){
 
@@ -544,23 +617,24 @@ var add_selection = function(_name)
 	}).bind('keydown.range-slider', function(event){
 		
 		var from, to, type;
-console.log(this);
-change_by_key = 1;
-if (event.shiftKey) 
-{
-	var change_by_key = 5;
-}
+
+		change_by_key = 1;
+		if (event.shiftKey) 
+		{
+			var change_by_key = 5;
+		}
+
 		if($(this).is('.max'))
 		{
 			$(_self).find('.dynamic-range .max span.mount').show(); //design*********
 			if(event.keyCode == 38 || event.keyCode == 39)
 			{
-				$(this).parents('.range-slider').rangeSlider('option', 'range', 'to', change_by_key, {type:'step_plus'});
+				$(this).parents('.range-slider').rangeSlider('option', 'range', 'to', {type:'step_plus'}, change_by_key);
 				return false;
 			}
 			else if(event.keyCode == 37 || event.keyCode == 40)
 			{
-				$(this).parents('.range-slider').rangeSlider('option', 'range', 'to', -change_by_key, {type:'step_plus'});
+				$(this).parents('.range-slider').rangeSlider('option', 'range', 'to', {type:'step_plus'}, -change_by_key);
 				return false;
 			}
 		}
@@ -570,12 +644,12 @@ if (event.shiftKey)
 			$(_self).find('.dynamic-range .min span.mount').show(); //design*********
 			if(event.keyCode == 38 || event.keyCode == 39)
 			{
-				$(this).parents('.range-slider').rangeSlider('option', 'range', 'from', change_by_key, {type:'step_plus'});
+				$(this).parents('.range-slider').rangeSlider('option', 'range', 'from', {type:'step_plus'}, change_by_key);
 				return false;
 			}
 			else if(event.keyCode == 37 || event.keyCode == 40)
 			{
-				$(this).parents('.range-slider').rangeSlider('option', 'range', 'from', -change_by_key, {type:'step_plus'});
+				$(this).parents('.range-slider').rangeSlider('option', 'range', 'from', {type:'step_plus'}, -change_by_key);
 				return false;
 			}
 		}
@@ -583,6 +657,7 @@ if (event.shiftKey)
 			$(_self).find('.dynamic-range .min span.mount').hide(); //design*********
 
 	});
+
 	return selection;
 }
 })(jQuery);
