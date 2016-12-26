@@ -103,11 +103,32 @@
 	transform: rotate(90deg);
 }
 
+.range-slider[data-type="vertical"] .dynamic-range .min span::after{
+	transform: rotate(180deg);
+}
+
+.dynamic-range .min span, .dynamic-range .max span{
+	z-index: 999999;
+}
+
+.dynamic-range .min, .dynamic-range .max{
+	z-index: 999999;
+}
+
 .dynamic-range .max span::after{
 	transform: rotate(270deg);
+}
+
+.range-slider[data-type="vertical"] .dynamic-range .max span::after{
+	transform: rotate(0deg);
 }
 
 .margin-range{
 	margin: 60px 0;
 }
+
+.range-slider[data-type='vertical'] .margin-range{
+	margin: 0;
+}
+
 

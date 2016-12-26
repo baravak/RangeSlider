@@ -417,29 +417,27 @@
 
 				$(this).find(".dynamic-range .min .mount").attr("data-value-show", (data.min + from_step));
 				$(this).find(".dynamic-range .max .mount").attr("data-value-show", (data.min + to_step));;
-				if ( to_step-from_step <= min_unit) 
+				if ( to_step-from_step <= min_unit ) 
 				{
 					$(this).find(".dynamic-range .max .mount").attr("data-value-show", (min_unit+data.min+from_step));
 					$(this).find(".dynamic-range .min .mount").attr("data-value-show", (to_step-min_unit+data.min));
-				}
 
-				if (to_step <= min_unit+from_step)
-				{
+					if (to_step <= min_unit+from_step)
+					{
+						if(_from == null)
+						{
+							from_step = to_step - min_unit;
+						}
+						else if(_to == null)
+						{
+							to_step = from_step + min_unit;
+						}
 
-					if(_from == null)
-					{
-						from_step = to_step - min_unit;
-					}
-					else if(_to == null)
-					{
-						to_step = from_step + min_unit;
-					}
-					
-
-					if (to_step >= ($(this).rangeSlider('option', 'unit')))
-					{
-						to_step = ($(this).rangeSlider('option', 'unit'));
-						from_step = ($(this).rangeSlider('option', 'unit') - min_unit);
+						if (to_step >= ($(this).rangeSlider('option', 'unit')))
+						{
+							to_step = ($(this).rangeSlider('option', 'unit'));
+							from_step = ($(this).rangeSlider('option', 'unit') - min_unit);
+						}
 					}
 				}
 
@@ -458,7 +456,6 @@
 						}
 					});
 				}
-
 
 				from = (from_step * 100) / ($(this).rangeSlider('option', 'unit'));
 				to = (to_step * 100) / ($(this).rangeSlider('option', 'unit'));
@@ -532,20 +529,15 @@ var add_selection = function(_name)
 	// 
 
 
-
-
 	if (!$(this).attr("data-infinity"))
 	{
-
 		$(this).unbind('mousedown.dynamic-range');
 		$(this).bind('mousedown.dynamic-range', function(){
-			var dynamic_range = $(this).find(".dynamic-range");
+			var dynamic_range = $(this).find(".dynamic-range");	
 
-		
 
 		$(dynamic_range).bind('mousedown.dynamic-range', function(){
 		var _self = $(this).parents(".range-slider");
-		console.log(this);
 		var dynamic_range_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-range").css("height")) : parseInt($(_self).find(".dynamic-range").css("width"));
 		var dynamic_margin_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-margin").css("height")) : parseInt($(_self).find(".dynamic-margin").css("width"));
 		var to_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-margin").css("height")) : parseInt($(_self).find(".dynamic-margin").css("width"));
@@ -612,11 +604,7 @@ var add_selection = function(_name)
 	});
 	}
 
-
 	var data_fix_mount = $(this).attr("data-fix-mount");
-
-
-	
 	var data = $(this).data('range-slider');
 	var _self = this;
 	var selection = $("<div class='"+_name+"'></div>");
