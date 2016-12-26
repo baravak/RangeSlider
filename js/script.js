@@ -510,9 +510,8 @@
 			if (data_fix_mount == 'on')
 			{
 				my_mount.show();
-				console.log(this);
+				// console.log(this);
 				$(this).addClass("margin-range");
-
 			}
 			margin_range.hide();
 			dynamic_range.hide();
@@ -530,73 +529,88 @@
 var add_selection = function(_name)
 {
 	// $(_self).find('.dynamic-range span.mount').hide(); //design*********
-	$(this).unbind('mousedown.dynamic-range');
-	$(this).bind('mousedown.dynamic-range', function(){
-	var _self = this;
-
-	var dynamic_range_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-range").css("height")) : parseInt($(_self).find(".dynamic-range").css("width"));
-	var dynamic_margin_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-margin").css("height")) : parseInt($(_self).find(".dynamic-margin").css("width"));
-	var to_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-margin").css("height")) : parseInt($(_self).find(".dynamic-margin").css("width"));
+	// 
 
 
-	var range_width = dynamic_range_click;
-	var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
-	var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
-	var ziro_on_click  = mouse_position - ziro_point;
-	var mouse_selection = mouse_position - ziro_point;
-	mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
 
-	$(document).unbind("mousemove.dynamic-range");
-	$(document).bind("mousemove.dynamic-range", function(event){
 
-		// $(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********
-		// $(_self).find('.dynamic-range span.mount').show(); //design*********
-		var margin_type = data.type == 'vertical'? "height" : "width";
+	if (!$(this).attr("data-infinity"))
+	{
+
+		$(this).unbind('mousedown.dynamic-range');
+		$(this).bind('mousedown.dynamic-range', function(){
+			var dynamic_range = $(this).find(".dynamic-range");
+
+		
+
+		$(dynamic_range).bind('mousedown.dynamic-range', function(){
+		var _self = $(this).parents(".range-slider");
+		console.log(this);
+		var dynamic_range_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-range").css("height")) : parseInt($(_self).find(".dynamic-range").css("width"));
+		var dynamic_margin_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-margin").css("height")) : parseInt($(_self).find(".dynamic-margin").css("width"));
+		var to_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-margin").css("height")) : parseInt($(_self).find(".dynamic-margin").css("width"));
+
+
+		var range_width = dynamic_range_click;
 		var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
 		var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+		var ziro_on_click  = mouse_position - ziro_point;
 		var mouse_selection = mouse_position - ziro_point;
 		mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
-		var move = mouse_selection - ziro_on_click;
-		var from_click = dynamic_margin_click;
-		var to_click = dynamic_margin_click + dynamic_range_click;
-		// var total_width = parseInt($(_self).css("width"));
-		var total_width = parseInt($(_self).css(margin_type));
 
-		var new_from = move + dynamic_margin_click;
-		var new_to = dynamic_range_click+dynamic_margin_click+move;
+		$(document).unbind("mousemove.dynamic-range");
+		$(document).bind("mousemove.dynamic-range", function(event){
+
+			// $(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********
+			// $(_self).find('.dynamic-range span.mount').show(); //design*********
+			var margin_type = data.type == 'vertical'? "height" : "width";
+			var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
+			var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+			var mouse_selection = mouse_position - ziro_point;
+			mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
+			var move = mouse_selection - ziro_on_click;
+			var from_click = dynamic_margin_click;
+			var to_click = dynamic_margin_click + dynamic_range_click;
+			// var total_width = parseInt($(_self).css("width"));
+			var total_width = parseInt($(_self).css(margin_type));
+
+			var new_from = move + dynamic_margin_click;
+			var new_to = dynamic_range_click+dynamic_margin_click+move;
 
 
-		$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, new_from);
-		$(_self).rangeSlider('option', 'range','to',{type:'pixel'}, new_to);
-		$(_self).find("dynamic-range").css(margin_type, range_width);
+			$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, new_from);
+			$(_self).rangeSlider('option', 'range','to',{type:'pixel'}, new_to);
+			$(_self).find("dynamic-range").css(margin_type, range_width);
 
 
-		if (parseInt($(_self).find(".dynamic-range").css("width")) <= range_width) 
-		{
-			$(_self).find(".dynamic-range").css(margin_type,range_width);
-			// var my_unit = $(_self).rangeSlider('option', 'unit');
-			if (new_to >= total_width) 
+			if (parseInt($(_self).find(".dynamic-range").css("width")) <= range_width) 
 			{
-				$(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width));
-				data.type == 'vertical'? $(_self).find(".dynamic-margin").css(margin_type, 0) : $(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width));
+				$(_self).find(".dynamic-range").css(margin_type,range_width);
+				// var my_unit = $(_self).rangeSlider('option', 'unit');
+				if (new_to >= total_width) 
+				{
+					$(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width));
+					data.type == 'vertical'? $(_self).find(".dynamic-margin").css(margin_type, 0) : $(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width));
+				}
+				else if(new_from <= 0)
+				{
+					$(_self).find(".dynamic-margin").css(margin_type, 0);
+					data.type == 'vertical'? $(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width)) : $(_self).find(".dynamic-margin").css(margin_type, 0);
+				}
 			}
-			else if(new_from <= 0)
-			{
-				$(_self).find(".dynamic-margin").css(margin_type, 0);
-				data.type == 'vertical'? $(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width)) : $(_self).find(".dynamic-margin").css(margin_type, 0);
-			}
-		}
 
-		}).bind("mouseup.dynamic-range", function(){
-			// $(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
-			// $(_self).find('.dynamic-range span.mount').hide(); //design*********
-			$(document).unbind("mouseup.dynamic-range");
+			}).bind("mouseup.dynamic-range", function(){
+				// $(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
+				// $(_self).find('.dynamic-range span.mount').hide(); //design*********
+				$(document).unbind("mouseup.dynamic-range");
+				$(document).unbind("mousemove.dynamic-range");
+			});
+			return false;
+		}).bind("mouseup", function(){
 			$(document).unbind("mousemove.dynamic-range");
 		});
-		return false;
-	}).bind("mouseup", function(){
-		$(document).unbind("mousemove.dynamic-range");
 	});
+	}
 
 
 	var data_fix_mount = $(this).attr("data-fix-mount");
@@ -606,6 +620,7 @@ var add_selection = function(_name)
 	var data = $(this).data('range-slider');
 	var _self = this;
 	var selection = $("<div class='"+_name+"'></div>");
+	console.log()
 	$(this).trigger("range-slider::selection", [selection, _name]);
 	selection.attr('tabindex', '0');
 	selection.unbind('mousedown.range-slider');
