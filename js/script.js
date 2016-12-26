@@ -531,9 +531,9 @@ var add_selection = function(_name)
 
 	if (!$(this).attr("data-infinity"))
 	{
-		$(this).unbind('mousedown.dynamic-range');
-		$(this).bind('mousedown.dynamic-range', function(){
-			var dynamic_range = $(this).find(".dynamic-range");	
+		$(this).unbind('mousemove.dynamic-range');
+		$(this).bind('mousemove.dynamic-range', function(){
+			var dynamic_range = $(this).find(".dynamic-range");
 
 
 		$(dynamic_range).bind('mousedown.dynamic-range', function(){
@@ -590,6 +590,23 @@ var add_selection = function(_name)
 					data.type == 'vertical'? $(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width)) : $(_self).find(".dynamic-margin").css(margin_type, 0);
 				}
 			}
+
+
+// if (new_from <= 0) 
+// {
+// 	console.log(data.unit);
+// 	$(this).find(".dynamic-range .max .mount").attr("data-value-show", total_width);
+
+// }
+
+// else if (new_to >= total_width) 
+// {
+// 	console.log(data.unit);
+// 	$(this).find(".dynamic-range .min .mount").attr("data-value-show", total_width);
+
+// }
+
+
 
 			}).bind("mouseup.dynamic-range", function(){
 				// $(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
