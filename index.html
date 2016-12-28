@@ -12,10 +12,10 @@
 	<script src="js/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 	<script src="js/script.js"></script>
 </head>
-
 <body>
 	<h1>Horizontal</h1>
-	<div class="range-slider" id='x4' data-fix-mount='on' data-min-title='min title' data-max-title='max title' data-max-boycott='90'></div>
+	<div class="range-slider" id='a' data-fix-mount='on' data-max-title='max title' data-infinity='min' data-max="1000000" data-step='[{"start": 0, "end": 100, "step": 10},{"start": 100, "end": 1000, "step": 100},{"start": 1000, "end": 10000, "step": 1000},{"start": 10000, "end": 100000, "step": 10000},{"start": 100000, "end": 1000000, "step": 100000}]'></div>
+	<div class="range-slider" id='b' data-fix-mount='on' data-min-title='min title' data-max-title='max title' data-max-boycott='90'></div>
 	<div class="range-slider" data-min="10" id='x1' data-infinity='min' data-min-unit='15' data-fix-mount='on' data-min-title='min title' data-max-title='max title'></div>
 	<input type="number" data-range-bind='x1' data-range-value='min' data-min-title='min title' data-max-title='max title'>
 	<input type="number" data-range-bind='x1' data-range-value='max'>
@@ -50,10 +50,31 @@
 	<div class="range-slider" data-type='vertical' data-min="-60" data-max='200' data-step="5" data-max-limit='180'></div>
 	<div class="range-slider" id="z" data-type='vertical' data-min="-20" data-max='200' data-step="5" data-min-limit='20' data-max-limit='180'></div>
 
+
 	<script type="text/javascript">
 		$(document).ready(function() {
+			$("#a").on('rangeSlider:debug', function(event, _args, _step){
+				// console.log(this);
+				// console.log(_step);
+				// console.log(_args);
+			});
 			$(".range-slider").rangeSlider();
 		});
 	</script>
+
+
+
+
+<!-- <script>
+$(document).ready(function(){
+    $("button").click(function(){
+        $.getJSON("demo_ajax_json.js", function(result){
+            $.each(result, function(i, field){
+                $("div").append(field + " ");
+            });
+        });
+    });
+});
+</script> -->
 </body>
 </html>

@@ -55,11 +55,38 @@
 			return data_step;
 		}
 
-		data_step = Number($(this).attr('data-step'));
-		if (isNaN(data_step)) 
-		{
-			data_step = 1;
+		var data = $(this).attr("data-step");
+		try {
+	    data_step = $.parseJSON(data);
+
+		} catch (e) {
+			data_step = Number(data);
+			if (isNaN(data_step)) 
+			{
+				data_step = 1;
+			}
 			$(this).attr('data-step', data_step);
+		}
+		$(this).trigger("rangeSlider:debug", [data, data_step]);	
+
+
+		if (Array.isArray(data_step)) 
+		{
+			var data_step = 0;
+			if ($(this).attr("data-step")) 
+			{
+				var multi_steps = JSON.parse($(this).attr("data-step"));
+				for (var i = 0; i < multi_steps.length; i++) 
+				{
+					var multi_steps_details = multi_steps[i];
+					var start  = parseInt(multi_steps_details["start"]);
+					var end    = parseInt(multi_steps_details["end"]);
+					var step   = parseInt(multi_steps_details["step"]);
+					data_step += ((end - start) / step);
+				}
+				var _unit = $(this).rangeSlider('option', 'unit');
+				$(this).attr('data-step', (_unit/data_step));
+			}
 		}
 		return data_step;
 	}
@@ -161,7 +188,6 @@
 		}
 		return max_boycott;
 	}
-	
 
 	optionMethod.min_default = function(_name,_set)
 	{
@@ -327,15 +353,15 @@
 
 
 			$(this).rangeSlider('option', 'type', $(this).attr("data-type"));
-			$(this).rangeSlider('option', 'step', $(this).attr("data-step"));
+			// $(this).rangeSlider('option', 'step', $(this).attr("data-step"));
 			$(this).rangeSlider('option', 'min', $(this).attr("data-min"));
 			$(this).rangeSlider('option', 'max', $(this).attr("data-max"));
 			$(this).rangeSlider('option', 'unit', $(this).attr("data-unit"));
-			$(this).rangeSlider('option', 'min_default', $(this).attr("data-min-default"));
-			$(this).rangeSlider('option', 'max_default', $(this).attr("data-max-default"));
+			// $(this).rangeSlider('option', 'min_default', $(this).attr("data-min-default"));
+			// $(this).rangeSlider('option', 'max_default', $(this).attr("data-max-default"));
 			$(this).rangeSlider('option', 'min_unit', $(this).attr("data-min-unit"));;
-			$(this).rangeSlider('option', 'min_title', $(this).attr("data-min-title"));;
-			$(this).rangeSlider('option', 'max_title', $(this).attr("data-min-title"));;
+			// $(this).rangeSlider('option', 'min_title', $(this).attr("data-min-title"));;
+			// $(this).rangeSlider('option', 'max_title', $(this).attr("data-min-title"));;
 			$(this).rangeSlider('option', 'max_boycott', $(this).attr("data-max-boycott"));;
 
 
@@ -438,7 +464,7 @@
 				{
 					to_step = data.max_boycott-data.min;
 				}
-				
+
 				if ((from_step) >= (data.max_boycott-data.min))
 				{
 					from_step = data.max_boycott-data.min;
@@ -608,29 +634,18 @@ var add_selection = function(_name)
 		$(document).unbind("mousemove.dynamic-range");
 		$(document).bind("mousemove.dynamic-range", function(event){
 
+			$(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********
+			$(_self).find('.dynamic-range span.mount').show(); //design*********
 			var mouse_position  = data.type == 'vertical' ? event.pageY : event.pageX;
 			var ziro_point      = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
 			var mouse_selection = mouse_position - ziro_point;
 			mouse_selection     = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
 			var move            = mouse_selection - ziro_on_click;
 
-
 			var total_width_unit = $(_self).rangeSlider('option', 'max_boycott') - $(_self).rangeSlider('option', 'min');
-
-			// var total_width_unit 	 = $(_self).rangeSlider('option', 'max_boycott') - $(_self).rangeSlider('option', 'min');
 			var total_width_pixel 	 = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
-
-			// console.log("total_width_unit: ", total_width_unit)
-if ($(_self).rangeSlider('option', 'min') < 0) 
-{
-	console.log("('min') < 0")
-}
-
 			var final_from =margin+move;
 			var final_to   =range_width+margin+move;
-			
-			console.log("final_to: ", final_to)
-			console.log("total_width_pixel: ", total_width_pixel)
 
 			if (final_to >= total_width_pixel)
 			{
@@ -641,34 +656,17 @@ if ($(_self).rangeSlider('option', 'min') < 0)
 				final_to  = range_width;
 			}
 
-
-
-
 			$(_self).rangeSlider('option', 'range', 'to',{type:'pixel'}, final_to);
 			$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, final_from);
-// console.log(changing_from)
 
-// console.log(total_width_pixel)
-// console.log("changing_to:", changing_to)
-// console.log("changing_from:", changing_from)
-
-
-
-
-// if (new_from < 0) 
-// {
-// 	$(_self).find(".dynamic-range .min .mount").attr("data-value-show", data.min_title);
-// 	$(_self).find(".dynamic-range .max .mount").attr("data-value-show", 'fix');
-// }
-
-// else if (new_to > total_width) 
-// {
-// 	$(_self).find(".dynamic-range .max .mount").attr("data-value-show", data.max_boycott);
-// 	$(_self).find(".dynamic-range .min .mount").attr("data-value-show", 'fix');
-// }
 			}).bind("mouseup.dynamic-range", function(){
-				// $(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
-				// $(_self).find('.dynamic-range span.mount').hide(); //design*********
+
+				$(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
+				if (data_fix_mount != "on") 
+				{
+					$(_self).find('.dynamic-range span.mount').hide(); //design*********
+				}
+
 				$(document).unbind("mouseup.dynamic-range");
 				$(document).unbind("mousemove.dynamic-range");
 			});
@@ -694,9 +692,9 @@ if ($(_self).rangeSlider('option', 'min') < 0)
 		$(document).bind("mousemove.range-slider", function(event){
 
 
+			$(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********
 			if (data_fix_mount != "on")
 			{
-				$(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********
 				$(_self).find('.dynamic-range .'+ _name +' span.mount').show(); //design*********
 			}
 			var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
@@ -712,9 +710,10 @@ if ($(_self).rangeSlider('option', 'min') < 0)
 				$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, mouse_selection);
 			}
 		}).bind("mouseup.range-slider", function(){
+			
+			$(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
 			if (data_fix_mount != "on") 
 			{
-				$(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
 				$(_self).find('.dynamic-range .'+ _name +' span.mount').hide(); //design*********
 			}
 			$(document).unbind("mouseup.range-slider");
