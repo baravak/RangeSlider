@@ -634,7 +634,7 @@ var add_selection = function(_name)
 		$(document).unbind("mousemove.dynamic-range");
 		$(document).bind("mousemove.dynamic-range", function(event){
 
-			$(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********
+			$(_self).find('.dynamic-range div.min , .dynamic-range div.max').addClass("active"); //design*********
 			$(_self).find('.dynamic-range span.mount').show(); //design*********
 			var mouse_position  = data.type == 'vertical' ? event.pageY : event.pageX;
 			var ziro_point      = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
@@ -661,7 +661,7 @@ var add_selection = function(_name)
 
 			}).bind("mouseup.dynamic-range", function(){
 
-				$(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
+				$(_self).find('.dynamic-range div.min , .dynamic-range div.max').removeClass("active"); //design*********
 				if (data_fix_mount != "on") 
 				{
 					$(_self).find('.dynamic-range span.mount').hide(); //design*********
@@ -691,8 +691,7 @@ var add_selection = function(_name)
 		$(document).unbind("mousemove.range-slider");
 		$(document).bind("mousemove.range-slider", function(event){
 
-
-			$(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********
+			$(_self).find('.dynamic-range .'+ _name).addClass("active"); //design*********
 			if (data_fix_mount != "on")
 			{
 				$(_self).find('.dynamic-range .'+ _name +' span.mount').show(); //design*********
@@ -711,7 +710,7 @@ var add_selection = function(_name)
 			}
 		}).bind("mouseup.range-slider", function(){
 			
-			$(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
+			$(_self).find('.dynamic-range .'+ _name).removeClass("active"); //design*********
 			if (data_fix_mount != "on") 
 			{
 				$(_self).find('.dynamic-range .'+ _name +' span.mount').hide(); //design*********

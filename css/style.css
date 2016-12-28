@@ -38,22 +38,87 @@
 .range-slider .dynamic-range .min{
 	left:-15px;
 	top:-20px;
-	-webkit-transform: rotate(-90deg);
-	transform: rotate(-90deg);
 }
 .range-slider .dynamic-range .max{
 	right:-15px;
 	bottom:-21px;
-	-webkit-transform: rotate(90deg);
-	transform: rotate(90deg);
 }
+
+/*******   ezaafe shod chon rotate shode bud kolle span . left va height jaashun bar ax bud   */
+
+.range-slider .dynamic-range div.active{
+	
+}
+
+.range-slider .dynamic-range .max.active::before{
+	content: "";
+	position: absolute;
+	top: -1px;
+	background:url(../images/svg/b.svg) no-repeat;
+	width:30px;
+	height:30px;
+    transform: rotate(90deg);
+}
+.range-slider[data-type="vertical"] .dynamic-range .max.active::before{
+	transform: rotate(0deg);
+	top: initial;
+	left: -1px;
+}
+
+
+.range-slider .dynamic-range .min.active::before{
+	content: "";
+	position: absolute;
+	top: 1px;
+	background:url(../images/svg/b.svg) no-repeat;
+	width:30px;
+	height:30px;
+    transform: rotate(270deg);
+}
+
+
+.range-slider[data-type='vertical'] .dynamic-range .min.active::before{
+    transform: rotate(0deg);
+    top: initial;
+    left:-1px; 
+}
+
+
 .range-slider .dynamic-range .min, .range-slider .dynamic-range .max{
 	outline:none;
-	background:url(../images/svg/rangeslider.svg) no-repeat;
 	position:absolute;
 	width:30px;
 	height:30px;
 }
+
+.range-slider .dynamic-range .max::after{
+	content: "";
+	position: absolute;
+	background:url(../images/svg/rangeslider.svg) no-repeat;
+	width: 30px;
+    height: 30px;
+	-webkit-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+.range-slider[data-type='vertical'] .dynamic-range .max::after{
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+}
+
+.range-slider .dynamic-range .min::after{
+	content: "";
+	position: absolute;
+	background:url(../images/svg/rangeslider.svg) no-repeat;
+	width: 30px;
+    height: 30px;
+	-webkit-transform: rotate(270deg);
+	transform: rotate(270deg);
+}
+
+.range-slider[data-type='vertical'] .dynamic-range .min::after{
+    transform: rotate(0deg);
+}
+
 .range-slider[data-type='vertical']{
 	background-color:#e7e7e7;
 	width:30px;
@@ -85,24 +150,62 @@
 .dynamic-range span::after{
 	content: attr(data-value-show);
 	display: inline-block;
-	width: 30px;
 	height: 30px;
 	background-color: #555;
 	color: #eee;
-	border-radius:50%;
-	left: 27px;
+    top: 27px;
     position: absolute;
     z-index: 22;
-
+    padding: 2px 10px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.dynamic-range .min span::after{
-	transform: rotate(90deg);
+.dynamic-range .max span::after{
+	top: 33px;
 }
 
+
+.dynamic-range span::before{
+	content: "";
+	display: inline-block;
+	height: 15px;
+	left: 5px;
+    top: -6px;
+    position: absolute;
+    z-index: 22;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #555;
+}
+
+.range-slider[data-type="vertical"] .dynamic-range span::before{
+    left: 13px;
+    top: 2px;
+    transform: rotate(90deg);
+}
+
+.dynamic-range .max span::before{
+    transform: rotate(180deg);
+    top: initial;
+    bottom: -6px;
+}
+
+.dynamic-range .min span::after{
+	top: initial;
+	bottom: 33px;
+}
+
+.range-slider[data-type="vertical"] .dynamic-range .min span::after{
+    bottom: 0px;
+    left: 33px;
+}
+
+/*.dynamic-range .min span::after{
+	transform: rotate(90deg);
+}
+*/
 .range-slider[data-type="vertical"] .dynamic-range .min span::after{
 	transform: rotate(180deg);
 }
@@ -115,12 +218,14 @@
 	z-index: 999999;
 }
 
-.dynamic-range .max span::after{
+/*.dynamic-range .max span::after{
 	transform: rotate(270deg);
-}
+}*/
 
 .range-slider[data-type="vertical"] .dynamic-range .max span::after{
 	transform: rotate(0deg);
+	top: initial;
+	left: 33px;
 }
 
 .margin-range{
