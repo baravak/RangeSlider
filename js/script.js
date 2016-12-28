@@ -77,7 +77,7 @@
 			return data_min;
 		}
 	
-		var data_min = Number($(this).attr('data-min'));
+		var data_min = parseInt($(this).attr('data-min'));
 		if (isNaN(data_min)) 
 		{
 			data_min = 0;
@@ -88,8 +88,7 @@
 
 	optionMethod.max = function(_name,_set)
 	{
-		var data_min = Number($(this).attr('data-min'));
-
+		var data_min = parseInt($(this).attr('data-min'));
 		if (_set)
 		{
 			var data_max = _set;
@@ -101,7 +100,7 @@
 			return data_max;
 		}
 
-		var data_max = Number($(this).attr('data-max'));
+		var data_max = parseInt($(this).attr('data-max'));
 		if(isNaN(data_max) || data_min >= data_max)
 		{
 			data_max = data_min + 100;
@@ -140,6 +139,29 @@
 		var data_unit = data_max - data_min;
 		return data_unit;
 	}
+
+	optionMethod.min_title = function(_name,_set)
+	{
+		var min_title = $(this).attr("data-min-title");
+		return min_title;
+	}
+
+	optionMethod.max_title = function(_name,_set)
+	{
+		var max_title = $(this).attr("data-max-title");
+		return max_title;
+	}
+
+	optionMethod.max_boycott = function(_name,_set)
+	{
+		var max_boycott = parseInt($(this).attr("data-max-boycott"));
+		if (isNaN(max_boycott))
+		{
+			max_boycott = $(this).rangeSlider('option', 'max');
+		}
+		return max_boycott;
+	}
+	
 
 	optionMethod.min_default = function(_name,_set)
 	{
@@ -195,8 +217,8 @@
 
 	optionMethod.margin = function(_name,_set)
 	{
-		var data_min_default = Number($(this).attr('data-min-default'));
-		var margin = data_min_default;
+		var margin_type = $(this).rangeSlider('option', 'type')=='vertical' ? 'height' : 'width';
+		var margin = parseInt($(this).find(".dynamic-margin").css(margin_type));
 		return margin;
 	}
 
@@ -208,20 +230,45 @@
 		return depth;
 	}
 
+	optionMethod.unit_to_pixel = function(_name, _set)
+	{
+		var total_unit = $(this).rangeSlider('option', 'max') - $(this).rangeSlider('option', 'min');
+		var margin_type = $(this).rangeSlider('option', 'type')=='vertical' ? 'height' : 'width';
+		var pixel_width = parseInt($(this).css(margin_type));
+		var unit_to_pixel = parseInt((_set*pixel_width)/total_unit);
+
+		return unit_to_pixel;
+	}
+
+	optionMethod.range_width = function(_name,_set)
+	{
+		var margin_type = $(this).rangeSlider('option', 'type')=='vertical' ? 'height' : 'width';
+		var range_width = parseInt($(this).find(".dynamic-range").css(margin_type));
+		return range_width;
+	}
+
+	optionMethod.total_width = function(_name,_set)
+	{
+		var margin_type = $(this).rangeSlider('option', 'type')=='vertical' ? 'height' : 'width';
+		var total_width = parseInt($(this).css(margin_type));
+		return total_width;
+	}
+
+
 
 
 	optionMethod.range = function(_name, _set, _option, _value)
 	{
-		if (_value == null) 
+		if (_value == null)
 		{
-			if (_set == 'from') 
+			if (_set == 'from')
 			{
-				return (_set + ": " + $(this).rangeSlider('option', 'margin'));
+				return ($(this).rangeSlider('option', 'margin'));
 			}
-			// else if (_set == 'to') 
-			// {
-			// 	return (_set + ": " + $(this).rangeSlider('option', 'margin'));
-			// }
+			else if (_set == 'to') 
+			{
+				return ($(this).rangeSlider('option', 'margin')+$(this).rangeSlider('option','range_width'));
+			}
 		}
 
 		if (_set == 'to')
@@ -287,6 +334,9 @@
 			$(this).rangeSlider('option', 'min_default', $(this).attr("data-min-default"));
 			$(this).rangeSlider('option', 'max_default', $(this).attr("data-max-default"));
 			$(this).rangeSlider('option', 'min_unit', $(this).attr("data-min-unit"));;
+			$(this).rangeSlider('option', 'min_title', $(this).attr("data-min-title"));;
+			$(this).rangeSlider('option', 'max_title', $(this).attr("data-min-title"));;
+			$(this).rangeSlider('option', 'max_boycott', $(this).attr("data-max-boycott"));;
 
 
 
@@ -299,18 +349,22 @@
 				var to = _to;
 				var data = $(this).data('range-slider');
 
-
-
-				data.type        = this.rangeSlider('option', 'type');
-				data.step        = this.rangeSlider('option', 'step');
-				data.min         = this.rangeSlider('option', 'min');
-				data.max         = this.rangeSlider('option', 'max');
-				data.unit        = this.rangeSlider('option', 'unit');
-				data.min_default = this.rangeSlider('option', 'min_default');
-				data.max_default = this.rangeSlider('option', 'max_default');
-				data.margin      = this.rangeSlider('option', 'margin');
-				data.depth       = this.rangeSlider('option', 'depth');
-				data.min_unit    = this.rangeSlider('option', 'min_unit');
+				data.type          = this.rangeSlider('option', 'type');
+				data.step          = this.rangeSlider('option', 'step');
+				data.min           = this.rangeSlider('option', 'min');
+				data.max           = this.rangeSlider('option', 'max');
+				data.unit          = this.rangeSlider('option', 'unit');
+				data.min_default   = this.rangeSlider('option', 'min_default');
+				data.max_default   = this.rangeSlider('option', 'max_default');
+				data.margin        = this.rangeSlider('option', 'margin');
+				data.depth         = this.rangeSlider('option', 'depth');
+				data.min_unit      = this.rangeSlider('option', 'min_unit');
+				data.min_title     = this.rangeSlider('option', 'min_title');
+				data.max_title     = this.rangeSlider('option', 'max_title');
+				data.max_boycott   = this.rangeSlider('option', 'max_boycott');
+				data.unit_to_pixel = this.rangeSlider('option', 'unit_to_pixel');
+				data.range_width   = this.rangeSlider('option', 'range_width');
+				data.total_width   = this.rangeSlider('option', 'total_width');
 				
 				var option = {
 					type : 'unit'
@@ -377,6 +431,18 @@
 				}
 				var from_step = Math.round(from / ($(this).rangeSlider('option', 'step'))) * ($(this).rangeSlider('option', 'step'));
 				var to_step = Math.round(to / ($(this).rangeSlider('option', 'step'))) * ($(this).rangeSlider('option', 'step'));
+
+
+
+				if ((to_step) >= (data.max_boycott-data.min))
+				{
+					to_step = data.max_boycott-data.min;
+				}
+				
+				if ((from_step) >= (data.max_boycott-data.min))
+				{
+					from_step = data.max_boycott-data.min;
+				}
 
 
 				if(to_step <  from_step)
@@ -507,7 +573,6 @@
 			if (data_fix_mount == 'on')
 			{
 				my_mount.show();
-				// console.log(this);
 				$(this).addClass("margin-range");
 			}
 			margin_range.hide();
@@ -525,89 +590,82 @@
 
 var add_selection = function(_name)
 {
-	// $(_self).find('.dynamic-range span.mount').hide(); //design*********
-	// 
-
-
 	if (!$(this).attr("data-infinity"))
 	{
 		$(this).unbind('mousemove.dynamic-range');
 		$(this).bind('mousemove.dynamic-range', function(){
 			var dynamic_range = $(this).find(".dynamic-range");
 
-
 		$(dynamic_range).bind('mousedown.dynamic-range', function(){
-		var _self = $(this).parents(".range-slider");
-		var dynamic_range_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-range").css("height")) : parseInt($(_self).find(".dynamic-range").css("width"));
-		var dynamic_margin_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-margin").css("height")) : parseInt($(_self).find(".dynamic-margin").css("width"));
-		var to_click = data.type == 'vertical'? parseInt($(_self).find(".dynamic-margin").css("height")) : parseInt($(_self).find(".dynamic-margin").css("width"));
-
-
-		var range_width = dynamic_range_click;
-		var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
-		var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
-		var ziro_on_click  = mouse_position - ziro_point;
-		var mouse_selection = mouse_position - ziro_point;
-		mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
-
+			var _self          = $(this).parents(".range-slider");
+			var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
+			var ziro_point     = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+			var ziro_on_click  = mouse_position - ziro_point;
+			var range_width    = $(_self).rangeSlider('option','range_width');
+			var margin         = $(_self).rangeSlider('option','margin');
+			var on_click_to    = $(_self).rangeSlider('option', 'range', 'to', {type:'pixel'});
+			var on_click_from  = $(_self).rangeSlider('option', 'range', 'from', {type:'pixel'});
 		$(document).unbind("mousemove.dynamic-range");
 		$(document).bind("mousemove.dynamic-range", function(event){
 
-			// $(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********
-			// $(_self).find('.dynamic-range span.mount').show(); //design*********
-			var margin_type = data.type == 'vertical'? "height" : "width";
-			var mouse_position = data.type == 'vertical' ? event.pageY : event.pageX;
-			var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+			var mouse_position  = data.type == 'vertical' ? event.pageY : event.pageX;
+			var ziro_point      = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
 			var mouse_selection = mouse_position - ziro_point;
-			mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
-			var move = mouse_selection - ziro_on_click;
-			var from_click = dynamic_margin_click;
-			var to_click = dynamic_margin_click + dynamic_range_click;
-			// var total_width = parseInt($(_self).css("width"));
-			var total_width = parseInt($(_self).css(margin_type));
-
-			var new_from = move + dynamic_margin_click;
-			var new_to = dynamic_range_click+dynamic_margin_click+move;
+			mouse_selection     = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
+			var move            = mouse_selection - ziro_on_click;
 
 
-			$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, new_from);
-			$(_self).rangeSlider('option', 'range','to',{type:'pixel'}, new_to);
-			$(_self).find("dynamic-range").css(margin_type, range_width);
+			var total_width_unit = $(_self).rangeSlider('option', 'max_boycott') - $(_self).rangeSlider('option', 'min');
 
+			// var total_width_unit 	 = $(_self).rangeSlider('option', 'max_boycott') - $(_self).rangeSlider('option', 'min');
+			var total_width_pixel 	 = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
 
-			if (parseInt($(_self).find(".dynamic-range").css("width")) <= range_width) 
+			// console.log("total_width_unit: ", total_width_unit)
+if ($(_self).rangeSlider('option', 'min') < 0) 
+{
+	console.log("('min') < 0")
+}
+
+			var final_from =margin+move;
+			var final_to   =range_width+margin+move;
+			
+			console.log("final_to: ", final_to)
+			console.log("total_width_pixel: ", total_width_pixel)
+
+			if (final_to >= total_width_pixel)
 			{
-				$(_self).find(".dynamic-range").css(margin_type,range_width);
-				// var my_unit = $(_self).rangeSlider('option', 'unit');
-				if (new_to >= total_width) 
-				{
-					$(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width));
-					data.type == 'vertical'? $(_self).find(".dynamic-margin").css(margin_type, 0) : $(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width));
-				}
-				else if(new_from <= 0)
-				{
-					$(_self).find(".dynamic-margin").css(margin_type, 0);
-					data.type == 'vertical'? $(_self).find(".dynamic-margin").css(margin_type, (total_width-range_width)) : $(_self).find(".dynamic-margin").css(margin_type, 0);
-				}
+				final_from = total_width_pixel-range_width;
+			}
+			else if(final_from <= 0)
+			{
+				final_to  = range_width;
 			}
 
 
-// if (new_from <= 0) 
-// {
-// 	console.log(data.unit);
-// 	$(this).find(".dynamic-range .max .mount").attr("data-value-show", total_width);
 
+
+			$(_self).rangeSlider('option', 'range', 'to',{type:'pixel'}, final_to);
+			$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, final_from);
+// console.log(changing_from)
+
+// console.log(total_width_pixel)
+// console.log("changing_to:", changing_to)
+// console.log("changing_from:", changing_from)
+
+
+
+
+// if (new_from < 0) 
+// {
+// 	$(_self).find(".dynamic-range .min .mount").attr("data-value-show", data.min_title);
+// 	$(_self).find(".dynamic-range .max .mount").attr("data-value-show", 'fix');
 // }
 
-// else if (new_to >= total_width) 
+// else if (new_to > total_width) 
 // {
-// 	console.log(data.unit);
-// 	$(this).find(".dynamic-range .min .mount").attr("data-value-show", total_width);
-
+// 	$(_self).find(".dynamic-range .max .mount").attr("data-value-show", data.max_boycott);
+// 	$(_self).find(".dynamic-range .min .mount").attr("data-value-show", 'fix');
 // }
-
-
-
 			}).bind("mouseup.dynamic-range", function(){
 				// $(_self).find('.dynamic-range').css('background-color','#00667a'); //design*********
 				// $(_self).find('.dynamic-range span.mount').hide(); //design*********
@@ -617,6 +675,7 @@ var add_selection = function(_name)
 			return false;
 		}).bind("mouseup", function(){
 			$(document).unbind("mousemove.dynamic-range");
+			$(dynamic_range).unbind("mousedown.dynamic-range");
 		});
 	});
 	}
@@ -625,7 +684,6 @@ var add_selection = function(_name)
 	var data = $(this).data('range-slider');
 	var _self = this;
 	var selection = $("<div class='"+_name+"'></div>");
-	console.log()
 	$(this).trigger("range-slider::selection", [selection, _name]);
 	selection.attr('tabindex', '0');
 	selection.unbind('mousedown.range-slider');
@@ -635,7 +693,7 @@ var add_selection = function(_name)
 		$(document).unbind("mousemove.range-slider");
 		$(document).bind("mousemove.range-slider", function(event){
 
-			
+
 			if (data_fix_mount != "on")
 			{
 				$(_self).find('.dynamic-range').css('background-color','#0f95af'); //design*********

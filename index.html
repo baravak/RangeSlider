@@ -15,11 +15,11 @@
 
 <body>
 	<h1>Horizontal</h1>
-	<div class="range-slider" id='x4' data-fix-mount='on'></div>
-	<div class="range-slider" data-min="10" id='x1' data-infinity='min' data-min-unit='15' data-fix-mount='on'></div>
-	<input type="number" data-range-bind='x1' data-range-value='min'>
+	<div class="range-slider" id='x4' data-fix-mount='on' data-min-title='min title' data-max-title='max title' data-max-boycott='90'></div>
+	<div class="range-slider" data-min="10" id='x1' data-infinity='min' data-min-unit='15' data-fix-mount='on' data-min-title='min title' data-max-title='max title'></div>
+	<input type="number" data-range-bind='x1' data-range-value='min' data-min-title='min title' data-max-title='max title'>
 	<input type="number" data-range-bind='x1' data-range-value='max'>
-	<div class="range-slider" data-min="25" data-min-default='30' data-min-unit='50'></div>
+	<div class="range-slider" data-min="25" data-min-default='30' data-min-unit='50' id="x3"></div>
 	<div class="range-slider" data-max='200'></div>
 	<div class="range-slider" data-max='200' data-max-default='160'></div>
 	<div class="range-slider" data-min="-10" data-max='200'></div>
@@ -29,16 +29,16 @@
 	<div class="range-slider" data-min="-10" data-max='200' data-step="5" data-max-default='180'></div>
 	<div class="range-slider" data-min="-10" data-max='200' data-step="8" data-min-default='30' data-max-default='180'></div>
 	<h2>limit</h2>
-	<div class="range-slider" data-min="-10" data-max='200' data-step="5" data-min-limit='20'></div>
+	<div class="range-slider" id="x" data-min="-10" data-max='200' data-step="5" data-min-limit='20'></div>
 	<div class="range-slider" data-min="-10" data-max='200' data-step="5" data-max-limit='180'></div>
 	<div class="range-slider" data-min="-10" data-max='200' data-step="5" data-min-limit='20' data-max-limit='180'></div>
 
 	<h1>Vertical</h1>
-	<div class="range-slider" data-type='vertical'></div>
-	<div class="range-slider" data-type='vertical' data-min="10"></div>
-	<div class="range-slider" data-type='vertical' data-min="10" data-min-default='30'></div>
+	<div class="range-slider" data-type='vertical' data-min-title='min title' data-max-title='max title' data-fix-mount='on'></div>
+	<div class="range-slider" data-type='vertical' data-min="10" data-min-title='min title' data-max-title='max title' data-fix-mount='on'></div>
+	<div class="range-slider" data-type='vertical' data-min="10" data-min-default='30' data-fix-mount='on'></div>
 	<div class="range-slider" data-type='vertical' data-max='200'></div>
-	<div class="range-slider" data-type='vertical' data-max='200' data-max-default='160'></div>
+	<div class="range-slider" data-type='vertical' data-max='200' data-max-default='160' data-fix-mount='on'></div>
 	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-min-default='30'></div>
 	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5"></div>
 	<h2>default</h2>
@@ -46,9 +46,9 @@
 	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5" data-max-default='180'></div>
 	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="8" data-min-default='30' data-max-default='180'></div>
 	<h2>limit</h2>
-	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5" data-min-limit='20'></div>
-	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5" data-max-limit='180'></div>
-	<div class="range-slider" data-type='vertical' data-min="-10" data-max='200' data-step="5" data-min-limit='20' data-max-limit='180'></div>
+	<div class="range-slider" data-type='vertical' data-min="-60" data-max='200' data-step="5" data-min-limit='20'></div>
+	<div class="range-slider" data-type='vertical' data-min="-60" data-max='200' data-step="5" data-max-limit='180'></div>
+	<div class="range-slider" id="z" data-type='vertical' data-min="-20" data-max='200' data-step="5" data-min-limit='20' data-max-limit='180'></div>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
