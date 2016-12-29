@@ -47,7 +47,7 @@
 /*******   ezaafe shod chon rotate shode bud kolle span . left va height jaashun bar ax bud   */
 
 .range-slider .dynamic-range div.active{
-	
+	z-index: 99999;
 }
 
 .range-slider .dynamic-range .max.active::before{
@@ -211,11 +211,11 @@
 }
 
 .dynamic-range .min span, .dynamic-range .max span{
-	z-index: 999999;
+	z-index: 9;
 }
 
 .dynamic-range .min, .dynamic-range .max{
-	z-index: 999999;
+	z-index: 9;
 }
 
 /*.dynamic-range .max span::after{
