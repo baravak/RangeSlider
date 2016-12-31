@@ -672,10 +672,75 @@ var add_selection = function(_name)
 			});
 			return false;
 		}).bind("mouseup", function(){
-			$(document).unbind("mousemove.dynamic-range");
 			$(dynamic_range).unbind("mousedown.dynamic-range");
 		});
 	});
+
+
+	$(document).unbind('touchend');
+	$(document).unbind('touchstart');
+	$(document).unbind('touchmove.dynamic-range');
+
+	$(this).bind('touchstart',function(e){
+		e.preventDefault();
+		var target = $( event.target );
+
+		var _self          = $(this);
+		if (target.is(".dynamic-range")) 
+		{
+			var mouse_position = data.type == 'vertical' ? e.originalEvent.touches[0].pageY : e.originalEvent.touches[0].pageX;
+			var ziro_point     = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+			var ziro_on_click  = mouse_position - ziro_point;
+			var range_width    = $(_self).rangeSlider('option','range_width');
+			var margin         = $(_self).rangeSlider('option','margin');
+			var on_click_to    = $(_self).rangeSlider('option', 'range', 'to', {type:'pixel'});
+			var on_click_from  = $(_self).rangeSlider('option', 'range', 'from', {type:'pixel'});
+		}
+
+		$(document).unbind('touchmove.dynamic-range');
+		$(document).bind('touchmove.dynamic-range',function(e){
+	      e.preventDefault();
+
+		var target = $( event.target );
+		if (target.is(".dynamic-range")) 
+		{
+			$(_self).find('.dynamic-range div.min , .dynamic-range div.max').addClass("active"); //design*********
+			$(_self).find('.dynamic-range span.mount').show(); //design*********
+			var mouse_position  = data.type == 'vertical' ? e.originalEvent.touches[0].pageY : e.originalEvent.touches[0].pageX;
+			var ziro_point      = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+			var mouse_selection = mouse_position - ziro_point;
+			mouse_selection     = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
+			var move            = mouse_selection - ziro_on_click;
+
+			var total_width_unit = $(_self).rangeSlider('option', 'max_boycott') - $(_self).rangeSlider('option', 'min');
+			var total_width_pixel 	 = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
+			var final_from =margin+move;
+			var final_to   =range_width+margin+move;
+
+			if (final_to >= total_width_pixel)
+			{
+				final_from = total_width_pixel-range_width;
+			}
+			else if(final_from <= 0)
+			{
+				final_to  = range_width;
+			}
+
+			$(_self).rangeSlider('option', 'range', 'to',{type:'pixel'}, final_to);
+			$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, final_from);
+		}
+		});
+
+	}).bind('touchend.dynamic-range',function(e){
+			$(_self).find('.dynamic-range div.min , .dynamic-range div.max').removeClass("active"); //design*********
+			if (data_fix_mount != "on") 
+			{
+				$(_self).find('.dynamic-range span.mount').hide(); //design*********
+			}
+			$(document).unbind('touchend');
+			$(document).unbind('touchstart');
+			$(document).unbind('touchmove');
+		});
 	}
 
 	var data_fix_mount = $(this).attr("data-fix-mount");
@@ -769,9 +834,37 @@ var add_selection = function(_name)
 			$(_self).find('.dynamic-range .max span.mount').hide(); //design*********
 			$(_self).find('.dynamic-range .min span.mount').hide(); //design*********
 		}
+	}).bind('touchmove',function(e){
+	      e.preventDefault();
+			$(_self).find('.dynamic-range .'+ _name).addClass("active"); //design*********
+			if (data_fix_mount != "on")
+			{
+				$(_self).find('.dynamic-range .'+ _name +' span.mount').show(); //design*********
+			}
+			var mouse_position = data.type == 'vertical' ? e.originalEvent.touches[0].pageY : e.originalEvent.touches[0].pageX;
+			var ziro_point = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+			var mouse_selection = mouse_position - ziro_point;
+			mouse_selection = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
+			if(_name == 'max')
+			{
+				$(_self).rangeSlider('option', 'range', 'to',{type:'pixel'}, mouse_selection);
+			}
+			else
+			{
+				$(_self).rangeSlider('option', 'range','from',{type:'pixel'}, mouse_selection);
+			}
 
-
+	}).bind('touchend',function(e){
+			e.preventDefault();
+			$(_self).find('.dynamic-range .'+ _name).removeClass("active"); //design*********
+			if (data_fix_mount != "on") 
+			{
+				$(_self).find('.dynamic-range .'+ _name +' span.mount').hide(); //design*********
+			}
+			$(document).unbind("mouseup.range-slider");
+			$(document).unbind("mousemove.range-slider");
 	});
+
 
 	return selection;
 }
