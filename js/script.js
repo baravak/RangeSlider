@@ -43,7 +43,6 @@
 
 	optionMethod.step = function(_name, _set, _json)
 	{
-// console.log($(this).attr("data-step"));
 		var result;
 		var data_step;
 		var my_step;
@@ -497,7 +496,6 @@
 				var to_step = Math.round(to / ($(this).rangeSlider('option', 'step'))) * ($(this).rangeSlider('option', 'step'));
 
 
-
 				if ((to_step) > (data.max_boycott-data.min))
 				{
 					to_step = data.max_boycott-data.min;
@@ -505,9 +503,9 @@
 					// console.log($(this).find(".dynamic-range .min .mount").attr("data-value-show"));
 				}
 
-				if ((from_step) > (data.max_boycott-data.min))
+				if ((from_step) > (data.max_boycott-data.min-data.min_unit))
 				{
-					from_step = data.max_boycott-data.min;
+					from_step = data.max_boycott-data.min-data.min_unit;
 				}
 
 				if(to_step <  from_step)
@@ -542,15 +540,8 @@
 				}
 
 				var min_unit = $(this).rangeSlider('option', 'min_unit');
-
-
-
-
-
-
 				$(this).find(".dynamic-range .min .mount").attr("data-value-show", parseInt(data.min + from_step));
 				$(this).find(".dynamic-range .max .mount").attr("data-value-show", parseInt(data.min + to_step));
-
 
 				if ( to_step-from_step <= min_unit )
 				{
@@ -566,7 +557,6 @@
 						else if(_to == null)
 						{
 							to_step = from_step + min_unit;
-
 						}
 
 						if (to_step >= ($(this).rangeSlider('option', 'unit')))
@@ -574,10 +564,13 @@
 							to_step = ($(this).rangeSlider('option', 'unit'));
 							from_step = ($(this).rangeSlider('option', 'unit') - min_unit);
 						}
+
+					}
+					if (from_step <= data.min) 
+					{
+						$(this).find(".dynamic-range .min .mount").attr("data-value-show", (data.min));
 					}
 				}
-
-
 
 				var json_string = $(this).attr("save_jason");
 				var steps = [];
@@ -623,8 +616,6 @@
 								var move = new_to_step-(levels[i-1]);
 							}
 							var to_multi_step_value = ( starts[i] + (move*steps[i]) );
-							console.log(to_multi_step_value)
-							console.log("----------------");
 							break
 						}
 					}
@@ -642,20 +633,12 @@
 								var move = new_from_step-(levels[i-1]);
 							}
 							var from_multi_step_value = ( starts[i] + (move*steps[i]) );
-							console.log(from_multi_step_value)
-							console.log(move)
-							console.log("----------------");
 							break
 						}
 					}
 					$(this).find(".dynamic-range .min .mount").attr("data-value-show", parseInt(from_multi_step_value));
 					$(this).find(".dynamic-range .max .mount").attr("data-value-show", parseInt(to_multi_step_value));	
 				}
-
-
-
-
-
 
 
 

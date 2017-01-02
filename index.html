@@ -18,11 +18,11 @@
 	
 	<div class="range-slider" id='b' data-fix-mount='on' data-min-title='min title' data-max-title='max title' data-max-boycott='90'></div>
 	
-	<div class="range-slider" data-min="10" id='x1' data-infinity='min' data-min-unit='15' data-fix-mount='on' data-min-title='min title' data-max-title='max title'></div>
+	<div class="range-slider" data-min="10" id='x1' data-infinity='min' data-fix-mount='on' data-min-title='min title' data-max-title='max title' data-step='[{"start": 0, "end": 10, "step": 1},{"start": 10, "end": 100, "step": 10},{"start": 100, "end": 1000, "step": 100},{"start": 1000, "end": 10000, "step": 1000}]'></div>
 	<input type="number" data-range-bind='x1' data-range-value='min' data-min-title='min title' data-max-title='max title'>
 	<input type="number" data-range-bind='x1' data-range-value='max'>
-	<div class="range-slider" data-min="25" data-min-default='30' data-min-unit='50' id="x3"></div>
-	<div class="range-slider" data-max='200'></div>
+	<div class="range-slider" data-min="25" data-min-default='30' data-min-unit='50' id="x3" data-fix-value='on'></div>
+	<div class="range-slider" data-max='200' id="c5"></div>
 	<div class="range-slider" data-max='200' data-max-default='160'></div>
 	<div class="range-slider" data-min="-10" data-max='200'></div>
 	<div class="range-slider" data-type="horizontal" data-min="-10" data-max='200' data-step="5"></div>
@@ -50,7 +50,7 @@
 	<h2>limit</h2>
 	<div class="range-slider" data-type='vertical' data-min="-60" data-max='200' data-step="5" data-min-limit='20'></div>
 	<div class="range-slider" data-type='vertical' data-min="-60" data-max='200' data-step="5" data-max-limit='180'></div>
-	<div class="range-slider" id="z" data-type='vertical' data-min="-20" data-max='200' data-step="5" data-min-limit='20' data-max-limit='180'></div>
+	<div class="range-slider" id="z" data-type='vertical' data-min="-20" data-max='200' data-min-limit='20' data-max-limit='180' data-step='[{"start": 0, "end": 10, "step": 1},{"start": 10, "end": 100, "step": 10},{"start": 100, "end": 1000, "step": 100},{"start": 1000, "end": 10000, "step": 1000}]'></div>
 
 	
 	<script type="text/javascript">
