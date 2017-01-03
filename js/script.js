@@ -824,15 +824,15 @@ var add_selection = function(_name)
 
 			$(_self).find('.dynamic-range div.min , .dynamic-range div.max').addClass("active"); //design*********
 			$(_self).find('.dynamic-range span.mount').show(); //design*********
-			var mouse_position  = data.type == 'vertical' ? event.pageY : event.pageX;
-			var ziro_point      = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
-			var mouse_selection = mouse_position - ziro_point;
-			mouse_selection     = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
-			var move            = mouse_selection - ziro_on_click;
-			var total_width_unit = $(_self).rangeSlider('option', 'max_limit') - $(_self).rangeSlider('option', 'min');
-			var total_width_pixel 	 = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
-			var final_from =margin+move;
-			var final_to   =range_width+margin+move;
+			var mouse_position    = data.type == 'vertical' ? event.pageY : event.pageX;
+			var ziro_point        = data.type == 'vertical'? $(_self).offset().top : $(_self).offset().left;
+			var mouse_selection   = mouse_position - ziro_point;
+			mouse_selection       = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
+			var move              = mouse_selection - ziro_on_click;
+			var total_width_unit  = $(_self).rangeSlider('option', 'max_limit') - $(_self).rangeSlider('option', 'min');
+			var total_width_pixel = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
+			var final_from        = margin+move;
+			var final_to          = range_width+margin+move;
 
 			if (final_to >= total_width_pixel)
 			{
@@ -899,13 +899,15 @@ var add_selection = function(_name)
 			mouse_selection     = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
 			var move            = mouse_selection - ziro_on_click;
 
-			var total_width_unit   = $(_self).rangeSlider('option', 'max_limit');
+			var total_width_unit   = $(_self).rangeSlider('option', 'max_limit') - $(_self).rangeSlider('option', 'min');
 			var total_width_pixel  = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
 			var final_from =margin+move;
 			var final_to   =range_width+margin+move;
 
 			if (final_to >= total_width_pixel)
 			{
+				console.log("total_width_pixel: ",total_width_pixel)
+				console.log(1111)
 				final_from = total_width_pixel-range_width;
 			}
 			else if(final_from <= 0)
