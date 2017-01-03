@@ -49,7 +49,7 @@ body{
 }
 
 .range-slider[data-type='vertical'] .max_limit{
-	right: -21px;
+	right: 21px;
 	top: -15px;
 }
 .range-slider[data-type='vertical'] .max_limit::before{
@@ -60,7 +60,7 @@ body{
 	background:url(../images/svg/rangeslider1.svg) no-repeat;
 	width:30px;
 	height:30px;
-    transform: rotate(0deg);
+    transform: rotate(180deg);
 }
 
 .range-slider .max_limit::before{

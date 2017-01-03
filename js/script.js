@@ -239,7 +239,7 @@
 
 	optionMethod.set_limit = function(_name,_set)
 	{
-		$(this).append("<div class='max_limit'></div>");
+		// $(this).append("<div class='max_limit'></div>");
 		var limit_value = $(this).rangeSlider('option','max_limit') - $(this).rangeSlider('option','min');
 		var limit_value_percent = (limit_value * 100) / $(this).rangeSlider('option','unit');
 			var margin_type = $(this).rangeSlider('option', 'type') == 'vertical'? "top" : "left";
@@ -906,8 +906,6 @@ var add_selection = function(_name)
 
 			if (final_to >= total_width_pixel)
 			{
-				console.log("total_width_pixel: ",total_width_pixel)
-				console.log(1111)
 				final_from = total_width_pixel-range_width;
 			}
 			else if(final_from <= 0)
