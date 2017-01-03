@@ -48,6 +48,21 @@ body{
 	top: -20px;
 }
 
+.range-slider[data-type='vertical'] .max_limit{
+	right: -21px;
+	top: -15px;
+}
+.range-slider[data-type='vertical'] .max_limit::before{
+	content: "";
+	position: absolute;
+	top: -15px;
+	right: 0;
+	background:url(../images/svg/rangeslider1.svg) no-repeat;
+	width:30px;
+	height:30px;
+    transform: rotate(0deg);
+}
+
 .range-slider .max_limit::before{
 	content: "";
 	position: absolute;

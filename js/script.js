@@ -242,7 +242,15 @@
 		$(this).append("<div class='max_limit'></div>");
 		var limit_value = $(this).rangeSlider('option','max_limit') - $(this).rangeSlider('option','min');
 		var limit_value_percent = (limit_value * 100) / $(this).rangeSlider('option','unit');
-		$(this).find(".max_limit").css("left", limit_value_percent + "%");
+			var margin_type = $(this).rangeSlider('option', 'type') == 'vertical'? "top" : "left";
+			if (margin_type == 'top')
+			{
+				$(this).find(".max_limit").css('top', 100-limit_value_percent + "%")
+			}
+			else
+			{
+				$(this).find(".max_limit").css('left', limit_value_percent + "%")
+			}
 	}
 
 	optionMethod.min_default = function(_name,_set)
@@ -528,30 +536,6 @@
 				var to_step = Math.round(to / ($(this).rangeSlider('option', 'step'))) * ($(this).rangeSlider('option', 'step'));
 
 
-// if ($(this).attr('data-max-limit'))
-// {
-// 	if (data.min > 0) 
-// 	{
-// 		if ((to_step) > (data.max_limit))
-// 		{
-// 			to_step = data.max_limit;
-// 		}
-		
-// 		console.log(from_step)
-// 		console.log(data.max_limit)
-// 		if ((from_step) > (data.max_limit-data.min_unit))
-// 		{
-// 			from_step = data.max_limit-data.min_unit;
-// 		}
-// 	}
-
-// 	if (data.min < 0) 
-// 	{
-// 		// console.log(this)
-// 	}
-
-// }
-
 		if ((to_step) > (data.max_limit - data.min))
 		{
 			to_step = data.max_limit-data.min;
@@ -561,8 +545,6 @@
 				if ((to_step) > (data.max_limit-data.min))
 				{
 					to_step = data.max_limit-data.min;
-					// $(this).find(".dynamic-range .max .mount").attr("data-value-show", data.max_title);
-					// console.log($(this).find(".dynamic-range .min .mount").attr("data-value-show"));
 				}
 
 				if ((from_step) > (data.max_limit-data.min-data.min_unit))
@@ -606,16 +588,6 @@
 		{
 			$(this).rangeSlider('option', 'set_limit');
 		}
-
-// if ($(this).attr('data-max-limit'))
-// {
-// 	$(this).append("<div class='max_limit'></div>");
-// 	var limit_value = $(this).rangeSlider('option','max_limit');
-// 	var limit_value_percent = (limit_value * 100) / $(this).rangeSlider('option','unit');
-// 	$(this).find(".max_limit").css("left", limit_value_percent + "%")
-// }
-	
-
 				var min_unit = $(this).rangeSlider('option', 'min_unit');
 				$(this).find(".dynamic-range .min .mount").attr("data-value-show", parseInt(data.min + from_step));
 				$(this).find(".dynamic-range .max .mount").attr("data-value-show", parseInt(data.min + to_step));
@@ -816,7 +788,15 @@
 				$(this).append("<div class='max_limit'></div>");
 				var limit_value = $(this).rangeSlider('option','max_limit') - $(this).rangeSlider('option','min');
 				var limit_value_percent = (limit_value * 100) / $(this).rangeSlider('option','unit');
-				$(this).find(".max_limit").css("left", limit_value_percent + "%")
+				var margin_type = $(this).rangeSlider('option', 'type') == 'vertical'? "top" : "left";
+				if (margin_type == 'top')
+				{
+					$(this).find(".max_limit").css('top', 100-limit_value_percent + "%")
+				}
+				else
+				{
+					$(this).find(".max_limit").css('left', limit_value_percent + "%")
+				}
 			}
 						$(this).trigger("range-slider::init::after");
 					});
