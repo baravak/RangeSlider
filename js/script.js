@@ -193,77 +193,121 @@
 		return max_title;
 	}
 
-	optionMethod.max_boycott = function(_name,_set)
+	optionMethod.max_limit = function(_name,_set)
 	{
-		var max_boycott = parseInt($(this).attr("data-max-boycott"));
-		var data_max = $(this).rangeSlider('option', 'max');
-		var data_min = $(this).rangeSlider('option', 'min');
-
-		if (_set)
-		{
-			var max_boycott = _set;
-			if(isNaN(max_boycott) || data_min > max_boycott)
+			var max_limit = parseInt($(this).attr("data-max-limit"));
+			if (!$(this).attr("data-infinity") == 'max') 
 			{
-				max_boycott = data_max;
+				console.log(this)
+				var max_limit = parseInt($(this).attr("data-max"));
 			}
-			$(this).attr('data-max-boycott',max_boycott);
-			return max_boycott;
-		}
 
-		if (isNaN(max_boycott) || data_min > max_boycott)
-		{
-			max_boycott = $(this).rangeSlider('option', 'max');
-		}
-		return max_boycott;
+			var data_max = $(this).rangeSlider('option', 'max');
+			var data_min = $(this).rangeSlider('option', 'min');
+
+			if (_set)
+			{
+				var max_limit = _set;
+				if(isNaN(max_limit) || data_min > max_limit)
+				{
+					max_limit = data_max;
+				}
+				$(this).attr('data-max-limit', max_limit);
+
+				var max_limit_pixel = $(this).rangeSlider('option', 'unit_to_pixel', max_limit);
+
+				if ($(this).rangeSlider('option', 'range', 'to', {type:'pixel'}) >=  max_limit_pixel) 
+				{
+					var new_to_pixel = $(this).rangeSlider('option', 'unit_to_pixel', max_limit);
+					$(this).rangeSlider('option', 'range', 'to', {type:'pixel'}, new_to_pixel);
+				}
+				
+				$(this).rangeSlider('option', 'set_limit');		
+				return max_limit;
+			}
+			if (isNaN(max_limit) || data_min > max_limit)
+			{
+				max_limit = $(this).rangeSlider('option', 'max');
+			}
+		// }
+		// else
+		// {
+		// 	max_limit = $(this).rangeSlider('option', 'max');
+		// }
+		return max_limit;
+	}
+
+	optionMethod.set_limit = function(_name,_set)
+	{
+		$(this).append("<div class='max_limit'></div>");
+		var limit_value = $(this).rangeSlider('option','max_limit') - $(this).rangeSlider('option','min');
+		var limit_value_percent = (limit_value * 100) / $(this).rangeSlider('option','unit');
+		$(this).find(".max_limit").css("left", limit_value_percent + "%");
 	}
 
 	optionMethod.min_default = function(_name,_set)
 	{
-		var data_min = parseInt($(this).attr('data-min'));
-		if (_set)
+		var _self = $(this).parents("range-slider");
+		if ($(this).attr("data-infinity") != 'min')
 		{
-			var data_min_default = _set;
+			var data_min = parseInt($(this).attr('data-min'));
+			if (_set)
+			{
+				var data_min_default = _set;
+				if(isNaN(data_min_default) || data_min > data_min_default)
+				{
+					data_min_default = 0;
+				}
+				$(this).attr('data-min-default',data_min_default);
+				return data_min_default;
+			}
+
+			var data_min_default = Number($(this).attr('data-min-default'));
 			if(isNaN(data_min_default) || data_min > data_min_default)
 			{
 				data_min_default = 0;
+				$(this).attr('data-min-default',data_min_default);
 			}
-			$(this).attr('data-min-default',data_min_default);
 			return data_min_default;
 		}
-
-		var data_min_default = Number($(this).attr('data-min-default'));
-		if(isNaN(data_min_default) || data_min > data_min_default)
+		else
 		{
-			data_min_default = 0;
-			$(this).attr('data-min-default',data_min_default);
+			// return $(this).rangeSlider('option','min');
+			return 0
 		}
-		return data_min_default;
 	}
 
 	optionMethod.max_default = function(_name,_set)
 	{
-		var data_max = Number($(this).attr("data-max"));
-		var data_min = Number($(this).attr('data-min'));
-		var data_unit = data_max - data_min;
-
-		if (_set)
+		if ($(this).attr("data-infinity") != 'max') 
 		{
-			var data_max_default = _set;
+			var data_max = Number($(this).attr("data-max"));
+			var data_min = Number($(this).attr('data-min'));
+			var data_unit = data_max - data_min;
+
+			if (_set)
+			{
+				var data_max_default = _set;
+				if(isNaN(data_max_default) || data_max < data_max_default)
+				{
+					data_max_default = data_unit;
+				}
+				$(this).attr('data-max-default',data_max_default);
+				return data_max_default;
+			}
+
+			var data_max_default = Number($(this).attr('data-max-default'));
 			if(isNaN(data_max_default) || data_max < data_max_default)
 			{
 				data_max_default = data_unit;
+				$(this).attr('data-max-default',data_max_default);
 			}
-			$(this).attr('data-max-default',data_max_default);
 			return data_max_default;
 		}
-
-		var data_max_default = Number($(this).attr('data-max-default'));
-		if(isNaN(data_max_default) || data_max < data_max_default)
+		else
 		{
-			data_max_default = data_unit;
-			$(this).attr('data-max-default',data_max_default);
+			return $(this).rangeSlider('option','max');
 		}
-		return data_max_default;
 	}
 
 
@@ -345,17 +389,6 @@
 		return optionMethod[_name].apply(this, _args);
 	}
 
-	function calc_multi_steps(_self)
-	{
-		var json_string = $(this).attr("save_jason");
-		if (json_string) 
-		{
-			var json_steps = jQuery.parseJSON( json_string );
-			console.log(json_steps)
-		}
-		return false
-	}
-
 	$.fn.rangeSlider = function(_method)
 	{
 		var _args = Array.prototype.slice.call(arguments);
@@ -365,8 +398,6 @@
 				return destroy.call(this);
 			case 'restart':
 				return restart.call(this);
-			case 'calc_multi_steps':
-				return calc_multi_steps.call(this);
 			case 'option':
 				return option.apply(this, _args.splice(1));
 		}
@@ -399,7 +430,7 @@
 			// $(this).rangeSlider('option', 'min_unit', $(this).attr("data-min-unit"));;
 			// $(this).rangeSlider('option', 'min_title', $(this).attr("data-min-title"));;
 			// $(this).rangeSlider('option', 'max_title', $(this).attr("data-min-title"));;
-			// $(this).rangeSlider('option', 'max_boycott', $(this).attr("data-max-boycott"));;
+			// $(this).rangeSlider('option', 'max_limit', $(this).attr("data-max-limit"));;
 
 
 
@@ -424,10 +455,11 @@
 				data.min_unit      = this.rangeSlider('option', 'min_unit');
 				data.min_title     = this.rangeSlider('option', 'min_title');
 				data.max_title     = this.rangeSlider('option', 'max_title');
-				data.max_boycott   = this.rangeSlider('option', 'max_boycott');
+				data.max_limit     = this.rangeSlider('option', 'max_limit');
 				data.unit_to_pixel = this.rangeSlider('option', 'unit_to_pixel');
 				data.range_width   = this.rangeSlider('option', 'range_width');
 				data.total_width   = this.rangeSlider('option', 'total_width');
+				// data.set_limit     = this.rangeSlider('option', 'set_limit');
 				
 				var option = {
 					type : 'unit'
@@ -496,16 +528,46 @@
 				var to_step = Math.round(to / ($(this).rangeSlider('option', 'step'))) * ($(this).rangeSlider('option', 'step'));
 
 
-				if ((to_step) > (data.max_boycott-data.min))
+// if ($(this).attr('data-max-limit'))
+// {
+// 	if (data.min > 0) 
+// 	{
+// 		if ((to_step) > (data.max_limit))
+// 		{
+// 			to_step = data.max_limit;
+// 		}
+		
+// 		console.log(from_step)
+// 		console.log(data.max_limit)
+// 		if ((from_step) > (data.max_limit-data.min_unit))
+// 		{
+// 			from_step = data.max_limit-data.min_unit;
+// 		}
+// 	}
+
+// 	if (data.min < 0) 
+// 	{
+// 		// console.log(this)
+// 	}
+
+// }
+
+		if ((to_step) > (data.max_limit - data.min))
+		{
+			to_step = data.max_limit-data.min;
+		}
+
+
+				if ((to_step) > (data.max_limit-data.min))
 				{
-					to_step = data.max_boycott-data.min;
+					to_step = data.max_limit-data.min;
 					// $(this).find(".dynamic-range .max .mount").attr("data-value-show", data.max_title);
 					// console.log($(this).find(".dynamic-range .min .mount").attr("data-value-show"));
 				}
 
-				if ((from_step) > (data.max_boycott-data.min-data.min_unit))
+				if ((from_step) > (data.max_limit-data.min-data.min_unit))
 				{
-					from_step = data.max_boycott-data.min-data.min_unit;
+					from_step = data.max_limit-data.min-data.min_unit;
 				}
 
 				if(to_step <  from_step)
@@ -538,6 +600,21 @@
 				{
 					from_step = 0;
 				}
+
+
+		if ($(this).attr('data-max-limit'))
+		{
+			$(this).rangeSlider('option', 'set_limit');
+		}
+
+// if ($(this).attr('data-max-limit'))
+// {
+// 	$(this).append("<div class='max_limit'></div>");
+// 	var limit_value = $(this).rangeSlider('option','max_limit');
+// 	var limit_value_percent = (limit_value * 100) / $(this).rangeSlider('option','unit');
+// 	$(this).find(".max_limit").css("left", limit_value_percent + "%")
+// }
+	
 
 				var min_unit = $(this).rangeSlider('option', 'min_unit');
 				$(this).find(".dynamic-range .min .mount").attr("data-value-show", parseInt(data.min + from_step));
@@ -715,13 +792,35 @@
 
 			margin_range.appendTo(this);
 			dynamic_range.appendTo(this);
-			$(this).range($(this).rangeSlider('option', 'min_default'), $(this).rangeSlider('option', 'max_default'));
-
+			
+			if ($(this).attr("data-infinity") == 'max') 
+			{
+				$(this).range($(this).rangeSlider('option', 'min_default')-$(this).rangeSlider('option', 'min'), $(this).rangeSlider('option', 'max'));
+			}
+			// else if($(this).attr("data-infinity") == 'min')
+			// {
+			// 	$(this).range($(this).rangeSlider('option', 'min'), $(this).rangeSlider('option', 'max_default'));
+			// }
+			else
+			{
+				$(this).range($(this).rangeSlider('option', 'min_default'), $(this).rangeSlider('option', 'max_default'));
+			}
+			
+			add_selection.call(this, 'min');
+			
 			margin_range.show();
 			dynamic_range.show();
-			$(this).trigger("range-slider::init::after");
-		});
-}
+
+			if ($(this).attr('data-max-limit'))
+			{
+				$(this).append("<div class='max_limit'></div>");
+				var limit_value = $(this).rangeSlider('option','max_limit') - $(this).rangeSlider('option','min');
+				var limit_value_percent = (limit_value * 100) / $(this).rangeSlider('option','unit');
+				$(this).find(".max_limit").css("left", limit_value_percent + "%")
+			}
+						$(this).trigger("range-slider::init::after");
+					});
+			}
 
 var add_selection = function(_name)
 {
@@ -750,8 +849,7 @@ var add_selection = function(_name)
 			var mouse_selection = mouse_position - ziro_point;
 			mouse_selection     = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
 			var move            = mouse_selection - ziro_on_click;
-
-			var total_width_unit = $(_self).rangeSlider('option', 'max_boycott') - $(_self).rangeSlider('option', 'min');
+			var total_width_unit = $(_self).rangeSlider('option', 'max_limit') - $(_self).rangeSlider('option', 'min');
 			var total_width_pixel 	 = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
 			var final_from =margin+move;
 			var final_to   =range_width+margin+move;
@@ -821,8 +919,8 @@ var add_selection = function(_name)
 			mouse_selection     = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
 			var move            = mouse_selection - ziro_on_click;
 
-			var total_width_unit = $(_self).rangeSlider('option', 'max_boycott') - $(_self).rangeSlider('option', 'min');
-			var total_width_pixel 	 = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
+			var total_width_unit   = $(_self).rangeSlider('option', 'max_limit');
+			var total_width_pixel  = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
 			var final_from =margin+move;
 			var final_to   =range_width+margin+move;
 
@@ -851,6 +949,8 @@ var add_selection = function(_name)
 			$(document).unbind('touchmove');
 		});
 	}
+
+
 
 	var data_fix_mount = $(this).attr("data-fix-mount");
 	var data = $(this).data('range-slider');

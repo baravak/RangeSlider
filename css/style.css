@@ -1,13 +1,21 @@
+body{
+	padding: 4em;
+}
+
 .range-slider{
 	display: inline-block;
 	position: relative;
-	margin-left:3em !important;
-	margin-right:3em !important;
 	direction: ltr;
 	text-align: left;
 	-webkit-user-select:none;
 	user-select:none;
+	height:35px;
+	background-color:#e7e7e7;
+	margin:2em 0;
+	display:block;
 }
+
+
 .range-slider *{
 	-webkit-user-select:none;
 	user-select:none;
@@ -29,12 +37,28 @@
 	padding: 0;
 	height: 100%;
 }
-.range-slider{
-	height:30px;
-	background-color:#e7e7e7;
-	margin:2em 0;
-	display:block;
+
+.range-slider .max_limit{
+	width: 30px;
+	height: 30px;
+	/*background-color: red;*/
+	display: inline-block;
+	position: absolute;
+	right: 0;
+	top: -20px;
 }
+
+.range-slider .max_limit::before{
+	content: "";
+	position: absolute;
+	top: 0px;
+	right: 15px;
+	background:url(../images/svg/rangeslider1.svg) no-repeat;
+	width:30px;
+	height:30px;
+    transform: rotate(270deg);
+}
+
 .range-slider .dynamic-range .min{
 	left:-15px;
 	top:-20px;
@@ -119,7 +143,7 @@
 .range-slider[data-type='vertical']{
 	background-color:#e7e7e7;
 	width:30px;
-	margin:1em 0;
+	margin:1em 3em;
 	display:inline-block;
 	min-height: 100px;
 }
@@ -178,8 +202,8 @@
 }
 
 .range-slider[data-type="vertical"] .dynamic-range span::before{
-    left: 13px;
-    top: 2px;
+    left: 18px;
+    top: 7px;
     transform: rotate(90deg);
 }
 
