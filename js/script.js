@@ -192,6 +192,7 @@
 
 	}
 
+
 	optionMethod.max_limit = function(_name, _set)
 	{
 		var max_limit;
@@ -234,6 +235,7 @@
 		}
 		return max_limit;
 	}
+
 
 	optionMethod.min_default = function(_name, _set)
 	{
@@ -675,19 +677,11 @@
 
 
 
-if(_from == null)
-{
-	var _name = "max";
-	var data_value = $(this).find(".dynamic-range .max .mount").attr("data-value-show");
-}
-else if(_to == null)
-{
-	var _name = "min";
-	var data_value = $(this).find(".dynamic-range .min .mount").attr("data-value-show");
-}
-
+var data_value_max = $(this).find(".dynamic-range .max .mount").attr("data-value-show");
+var data_value_min = $(this).find(".dynamic-range .min .mount").attr("data-value-show");
 
 var show_title;
+
 
 var _data = $(this).attr("data-show-title");
 try {
@@ -698,38 +692,60 @@ show_title = $.parseJSON(_data);
 }
 
 
+
 if (Array.isArray(show_title))
 {
 	for (var i = show_title.length - 1; i >= 0; i--) {
 		var show_title_details = show_title[i];
 		for(var key in show_title_details)
 		{
-			if (key == 'min')
+			var key_mount = key;
+			if (key == 'min') 
 			{
 				key = data.min;
+				var str_min = true;
 			}
 			else if (key == 'max')
 			{
 				key = data.max;
+				var str_max = true;
 			}
 
-			if (data_value == key)
+
+			if (data_value_max == key)
 			{
-
-				if (key == data.min)
+				if (key == data.min && str_min ) 
 				{
-					key = 'min'
+					var key_mount = key;
+					key = 'min';
 				}
-				else if (key == data.max)
+				else if (key == data.max && str_max ) 
 				{
-					key = 'max'
+					var key_mount = key;
+					key = 'max';
 				}
+				$(this).find(".dynamic-range .max .mount").attr("data-value-show",show_title_details[key]);
 
-				if (_name == "min")
+				if(data_value_min == key_mount)
 				{
 					$(this).find(".dynamic-range .min .mount").attr("data-value-show",show_title_details[key]);
 				}
-				else if(_name == "max")
+			}
+			
+			else if(data_value_min == key )
+			{
+				if (key == data.min && str_min ) 
+				{
+					var key_mount = key;
+					key = 'min'
+				}
+				else if (key == data.max && str_max ) 
+				{
+					var key_mount = key;
+					key = 'max'
+				}
+				$(this).find(".dynamic-range .min .mount").attr("data-value-show",show_title_details[key]);
+				if(data_value_max == key_mount)
 				{
 					$(this).find(".dynamic-range .max .mount").attr("data-value-show",show_title_details[key]);
 				}
@@ -799,6 +815,7 @@ if (Array.isArray(show_title))
 				}
 
 				dynamic_range.find('div.min, div.max').append("<span class='mount'></span>");
+				dynamic_range.find('div.min, div.max').append("<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 8 9' style='enable-background:new 0 0 8 9;' xml:space='preserve'><style type='text/css'>.st0{fill:#E5A428;}</style><path class='st0' d='M3.2,0C6.7-0.1,5.4,3.5,8,4.5C5.4,5.5,6.7,9.1,3.2,9L2.7,9V7.1L0,4.5l2.7-2.6V0L3.2,0z'/></svg>");
 				var my_mount = dynamic_range.find('div.min span.mount, div.max span.mount');
 				$(this).find('.dynamic-range span.mount').show(); //design*********
 				var data_fix_mount = $(this).attr("data-fix-mount");
@@ -879,7 +896,16 @@ var add_selection = function(_name)
 			var mouse_selection   = mouse_position - ziro_point;
 			mouse_selection       = data.type == 'vertical' ? $(_self).height() - mouse_selection : mouse_selection;
 			var move              = mouse_selection - ziro_on_click;
-			var total_width_unit  = $(_self).rangeSlider('option', 'max_limit') - $(_self).rangeSlider('option', 'min');
+			var my_max_limit 	  = $(_self).rangeSlider('option', 'max_limit');
+			if(my_max_limit)
+			{
+				var my_max_limit = $(_self).rangeSlider('option', 'max_limit');
+			}
+			else
+			{
+				var my_max_limit = $(_self).rangeSlider('option', 'max');	
+			}
+			var total_width_unit  = my_max_limit - $(_self).rangeSlider('option', 'min');
 			var total_width_pixel = $(_self).rangeSlider('option', 'unit_to_pixel', total_width_unit);
 			var final_from        = margin+move;
 			var final_to          = range_width+margin+move;
@@ -887,6 +913,7 @@ var add_selection = function(_name)
 			if (final_to >= total_width_pixel)
 			{
 				final_from = total_width_pixel-range_width;
+
 			}
 			else if(final_from <= 0)
 			{
@@ -979,8 +1006,6 @@ var add_selection = function(_name)
 			$(document).unbind('touchmove');
 		});
 	}
-
-
 
 	var data_fix_mount = $(this).attr("data-fix-mount");
 	var data = $(this).data('range-slider');
