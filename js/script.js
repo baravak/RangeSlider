@@ -223,6 +223,7 @@
 			var margin_type = $(this).rangeSlider('option', 'type') == 'vertical'? "top" : "left";
 			if(!$('.max_limit', this).length){
 				$(this).append("<div class='max_limit'></div>");
+				$(this).find(".max_limit").append("<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 8 9' style='enable-background:new 0 0 8 9;' xml:space='preserve'><style type='text/css'>.st0{fill:#E96914;}</style><path class='st0' d='M3.2,0C6.7-0.1,5.4,3.5,8,4.5C5.4,5.5,6.7,9.1,3.2,9L2.7,9V7.1L0,4.5l2.7-2.6V0L3.2,0z'/></svg>");
 			}
 			if (margin_type == 'top')
 			{
@@ -815,7 +816,7 @@ if (Array.isArray(show_title))
 				}
 
 				dynamic_range.find('div.min, div.max').append("<span class='mount'></span>");
-				dynamic_range.find('div.min, div.max').append("<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 8 9' style='enable-background:new 0 0 8 9;' xml:space='preserve'><style type='text/css'>.st0{fill:#E5A428;}</style><path class='st0' d='M3.2,0C6.7-0.1,5.4,3.5,8,4.5C5.4,5.5,6.7,9.1,3.2,9L2.7,9V7.1L0,4.5l2.7-2.6V0L3.2,0z'/></svg>");
+				dynamic_range.find('div.min, div.max').append("<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 8 9' style='enable-background:new 0 0 8 9;' xml:space='preserve'><style type='text/css'>.st1{fill:#E5A428;}</style><path class='st1' d='M3.2,0C6.7-0.1,5.4,3.5,8,4.5C5.4,5.5,6.7,9.1,3.2,9L2.7,9V7.1L0,4.5l2.7-2.6V0L3.2,0z'/></svg>");
 				var my_mount = dynamic_range.find('div.min span.mount, div.max span.mount');
 				$(this).find('.dynamic-range span.mount').show(); //design*********
 				var data_fix_mount = $(this).attr("data-fix-mount");
